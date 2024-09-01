@@ -5,17 +5,21 @@ const Login = () => {
   const [isSignInForm ,setIsSignForm]=useState(true);
   const[errorMesage,setErrorMessage]=useState(null);
 
+  const name=useRef(null);
   const email=useRef(null);
   const password=useRef(null);
 
   const handleButtonClick=()=> {
       //   Validate the form data
    // checkValidData(email,password)
+
    console.log(email.current.value);
    console.log(password.current.value);
 
    const message=checkValidData(email.current.value,password.current.value);
    setErrorMessage(message);
+
+   // Sign in / Sign Up
   };
 
   const toggleSignInForm=()=>{
