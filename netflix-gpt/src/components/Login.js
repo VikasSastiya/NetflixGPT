@@ -1,11 +1,11 @@
 import Header from './Header';
 import { useState,useRef } from 'react';
 import {checkValidData} from "../utils/validate.js"
-import {createUserWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
 import {auth} from "../utils/firebase.js"
 const Login = () => {
-  const [isSignInForm ,setIsSignForm]=useState(true);
-  const[errorMesage,setErrorMessage]=useState(null);
+  const [isSignInForm ,setIsSignInForm]=useState(true);
+  const[errorMessage,setErrorMessage]=useState(null);
 
   const name=useRef(null);
   const email=useRef(null);
@@ -40,11 +40,23 @@ const Login = () => {
    }
      else {
       // Sign In Logic
+      signInWithEmailAndPassword(auth,email.current.value,password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user)
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorCode+"-"+errorMessage);
+  });
      }
   };
 
   const toggleSignInForm=()=>{
-    setIsSignForm(!isSignInForm);
+    setIsSignInForm(!isSignInForm);
   };
   return (
   
@@ -61,7 +73,7 @@ const Login = () => {
     <input ref={email} type="text" placeholder="Email Address" className="p-4 my-2 w-full placeholder-white bg-yellow-600"/>
  
     <input ref={password} type="password" placeholder="Password" className="p-4 my-2 w-full placeholder-white bg-yellow-600"/>
-      <p className='text-red-500 font-bold text-lg py-2'>{errorMesage}</p>
+      <p className='text-red-500 font-bold text-lg py-2'>{errorMessage}</p>
      <button className="p-4 my -6 bg-orange-700 w-full rounded-lg" onClick={handleButtonClick}>{isSignInForm? "Sign In":"Sign Up"}</button>
      <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>{isSignInForm? "New to Globel School? SignUp Now":"Already registered? SignUp now"}</p>
     </form>
