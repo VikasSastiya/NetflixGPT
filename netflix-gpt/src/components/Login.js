@@ -1,11 +1,18 @@
-import Header from './Header';
+import Header from '../components/Header';
 import { useState,useRef } from 'react';
 import {checkValidData} from "../utils/validate.js"
-import {createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+   updateProfile,
+} from "firebase/auth";
 import {auth} from "../utils/firebase.js"
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 const Login = () => {
   const [isSignInForm ,setIsSignInForm]=useState(true);
   const[errorMessage,setErrorMessage]=useState(null);
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
 
   const name=useRef(null);
   const email=useRef(null);
@@ -24,11 +31,37 @@ const Login = () => {
    // Sign in / Sign Up Logic
    if(!isSignInForm){
     // Sign Up Logic
-    createUserWithEmailAndPassword(auth,email.current.value,password.current.value)
+    createUserWithEmailAndPassword(auth,
+      email.current.value,
+      password.current.value
+    )
   .then((userCredential) => {
     // Signed up 
     const user = userCredential.user;
+    updateProfile(user, {
+      displayName:name.current.value,
+       photoURL: "https://media.licdn.com/dms/image/D4E03AQE6D-qoeR-HEQ/profile-displayphoto-shrink_200_200/0/1682080271402?e=2147483647&v=beta&t=T4iQuhz--F6jrre4-choXbiibG5WtOsm7EosHvQRXOA"
+    })
+    .then(() => {
+      const {uid,email,displayName,photoURL}=user;
+      // Profile updated!
+      dispatch(
+        addUser({
+          uid:uid,
+          email:email,
+          displayName:displayName,
+          photoURL:photoURL,
+        })
+      );
+      navigate("/browser")
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+      setErrorMessage(error.message)
+    });
     console.log(user);
+    navigate("/browser");
     // ...
   })
   .catch((error) => {
@@ -45,6 +78,7 @@ const Login = () => {
     // Signed in 
     const user = userCredential.user;
     console.log(user)
+    navigate("/browser");
     // ...
   })
   .catch((error) => {
@@ -74,7 +108,7 @@ const Login = () => {
  
     <input ref={password} type="password" placeholder="Password" className="p-4 my-2 w-full placeholder-white bg-yellow-600"/>
       <p className='text-red-500 font-bold text-lg py-2'>{errorMessage}</p>
-     <button className="p-4 my -6 bg-orange-700 w-full rounded-lg" onClick={handleButtonClick}>{isSignInForm? "Sign In":"Sign Up"}</button>
+     <button className="p-4 my-6 bg-orange-700 w-full rounded-lg" onClick={handleButtonClick}>{isSignInForm? "Sign In":"Sign Up"}</button>
      <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>{isSignInForm? "New to Globel School? SignUp Now":"Already registered? SignUp now"}</p>
     </form>
     </div>
