@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import { useState,useRef } from 'react';
 import {checkValidData} from "../utils/validate.js"
+import { addUser } from "../utils/userSlice";
 import {createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
    updateProfile,

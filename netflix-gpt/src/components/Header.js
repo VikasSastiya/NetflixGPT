@@ -23,7 +23,7 @@ const Header=()=> {
         src="https://static.wixstatic.com/media/2ed9b9_514fe584406c4bcf9ab2285b120daaf0~mv2.png/v1/fill/w_225,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/GSP-colored.png" alt="logo"/>
          {user&&(<div className="flex p-2">
          <img className="w-12 h-12" alt="usericon" 
-         src={user.photoURL}
+         src="{user.photoURL}"
          />
         <button onClick={handleSignOut}  className="font-bold text text-red-500">SignOut</button>
     </div>)}
