@@ -1,29 +1,57 @@
-import {signOut} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
+import {onAuthStateChanged, signOut} from "firebase/auth";
+import {useEffect} from "react"
+import {use} from "react-router-dom";
 import {auth} from "../utils/firebase"
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {LOGO} from "../utils/constants.js"
+
+import {addUser,removeUser} from "../utils/userSlice";
 
 const Header=()=> {
+  const dispatch=useDispatch();
    const navigate=useNavigate();
   const user=useSelector((store)=>store.user);
   const handleSignOut=()=> {
     signOut(auth)
-    .then(()=>{
-      navigate("/");
-    })  .catch((error)=>{
+    .then(()=>{})
+    .catch((error)=>{
           // An error happened.
           navigate("/error");
     });
   };
+
+  useEffect(()=> {
+  const unsubscribe = onAuthStateChanged(auth,(user)=> {
+    if(user) {
+      const {uid,email,displayName,photoURL}=user;
+      dispatch(
+        addUser({
+          uid:uid,
+          email:email,
+          displayName:displayName,
+          photoURL:photoURL,
+        })
+      );
+      navigate("/browser");
+    } else {
+      dispatch(removeUser());
+      navigate("/");
+    }
+  });
+
+     // Unsubscribe when component unmount
+    return ()=> unsubscribe();
+  },[]);
   
   return  (
     <div className="absolute w-screen px-8 py-4  z-10 flex justify-between">
         <img
         className="w-44"
-        src="https://static.wixstatic.com/media/2ed9b9_514fe584406c4bcf9ab2285b120daaf0~mv2.png/v1/fill/w_225,h_66,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/GSP-colored.png" alt="logo"/>
+        src={LOGO} alt="logo"/>
          {user&&(<div className="flex p-2">
          <img className="w-12 h-12" alt="usericon" 
-         src="{user.photoURL}"
+         src="https://www.ilovepdf.com/img/ilovepdf/social/en-US/imagepdf.png"
          />
         <button onClick={handleSignOut}  className="font-bold text text-red-500">SignOut</button>
     </div>)}

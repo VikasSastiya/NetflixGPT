@@ -44,14 +44,14 @@ const Login = () => {
        photoURL: "https://media.licdn.com/dms/image/D4E03AQE6D-qoeR-HEQ/profile-displayphoto-shrink_200_200/0/1682080271402?e=2147483647&v=beta&t=T4iQuhz--F6jrre4-choXbiibG5WtOsm7EosHvQRXOA"
     })
     .then(() => {
-      const {uid,email,displayName,photoURL}=user;
+      const {uid,email,displayName}=user;
       // Profile updated!
       dispatch(
         addUser({
           uid:uid,
           email:email,
           displayName:displayName,
-          photoURL:photoURL,
+      
         })
       );
       navigate("/browser")
