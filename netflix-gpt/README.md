@@ -14,6 +14,13 @@ Sign up Form
 -Implement Sign In user Api
 -Created Redux Store with userSlice
 
+- BugFix: Sign up user displayName and profile picture update
+- BugFix: if the user is not logged in Redirect /browse to Login Page and vice-versa
+- Unsubscribed to the onAuthStateChanged callback
+-
+
+
+
 # Features
 
 - Login/Sign Up

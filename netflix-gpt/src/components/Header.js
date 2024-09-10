@@ -1,10 +1,9 @@
 import {onAuthStateChanged, signOut} from "firebase/auth";
 import {useEffect} from "react"
-import {use} from "react-router-dom";
 import {auth} from "../utils/firebase"
 import { useSelector ,useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {LOGO} from "../utils/constants.js"
+import {LOGO, USER_AVATAR} from "../utils/constants.js"
 
 import {addUser,removeUser} from "../utils/userSlice";
 
@@ -51,7 +50,7 @@ const Header=()=> {
         src={LOGO} alt="logo"/>
          {user&&(<div className="flex p-2">
          <img className="w-12 h-12" alt="usericon" 
-         src="https://www.ilovepdf.com/img/ilovepdf/social/en-US/imagepdf.png"
+         src={USER_AVATAR}
          />
         <button onClick={handleSignOut}  className="font-bold text text-red-500">SignOut</button>
     </div>)}
