@@ -5,8 +5,8 @@ const Browse = () => {
   return (
     <div>
       <Header/>
-      <MainContainer title="mern" description="mern"/>
-     
+      <MainContainer/>
+     <SecondaryContainer/>
       {/*
         MainContainer
            -VideoBackground
